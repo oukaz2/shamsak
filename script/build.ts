@@ -1,9 +1,8 @@
 import { build as esbuild } from "esbuild";
 import { build as viteBuild } from "vite";
 import { rm, readFile } from "fs/promises";
+import { mkdirSync, existsSync } from "fs";
 
-// server deps to bundle to reduce openat(2) syscalls
-// which helps cold start times
 const allowlist = [
   "@google/generative-ai",
   "axios",
@@ -36,7 +35,7 @@ async function buildAll() {
   console.log("building client...");
   await viteBuild();
 
-  console.log("building server...");
+  console.log("building server (Railway/local)...");
   const pkg = JSON.parse(await readFile("package.json", "utf-8"));
   const allDeps = [
     ...Object.keys(pkg.dependencies || {}),
@@ -56,7 +55,34 @@ async function buildAll() {
     minify: true,
     external: externals,
     logLevel: "info",
+    alias: {
+      "@shared": "./shared",
+    },
   });
+
+  // Build Vercel serverless API handler (fully bundled, no external deps)
+  console.log("building Vercel API handler...");
+  if (!existsSync("api")) mkdirSync("api");
+
+  await esbuild({
+    entryPoints: ["server/vercel-entry.ts"],
+    platform: "node",
+    bundle: true,
+    format: "cjs",
+    outfile: "api/_handler.cjs",
+    define: {
+      "process.env.NODE_ENV": '"production"',
+    },
+    minify: false,
+    // Bundle everything except native modules that need to stay as require()
+    external: ["better-sqlite3"],
+    logLevel: "info",
+    alias: {
+      "@shared": "./shared",
+    },
+  });
+
+  console.log("Done.");
 }
 
 buildAll().catch((err) => {

@@ -4,8 +4,12 @@ import * as schema from "@shared/schema";
 import path from "path";
 import fs from "fs";
 
-const dataDir = path.join(process.cwd(), "data");
-if (!fs.existsSync(dataDir)) {
+// Vercel: filesystem is read-only except /tmp
+// Local/Railway: use ./data (persists across restarts)
+const isVercel = !!process.env.VERCEL;
+const dataDir = isVercel ? "/tmp" : path.join(process.cwd(), "data");
+
+if (!isVercel && !fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
 }
 

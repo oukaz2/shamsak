@@ -7,3 +7,6 @@ vite.config.ts.*
 *.db
 *.db-shm
 *.db-wal
+api/_handler.js
+api/_handler.mjs
+api/_handler.cjs
