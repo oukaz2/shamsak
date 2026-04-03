@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+@layer base {
+  :root {
+    /* Shamsak Brand Tokens */
+    --brand: 183 97% 22%;         /* #01696F */
+    --brand-fg: 0 0% 100%;
+
+    --background: 45 20% 96%;     /* #F7F6F2 */
+    --foreground: 37 22% 14%;     /* #28251D */
+
+    --card: 0 0% 100%;
+    --card-foreground: 37 22% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 37 22% 14%;
+
+    --primary: 183 97% 22%;       /* #01696F */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 45 10% 90%;
+    --secondary-foreground: 37 22% 14%;
+
+    --muted: 45 10% 93%;
+    --muted-foreground: 35 8% 48%; /* #7A7974 */
+
+    --accent: 183 30% 94%;
+    --accent-foreground: 183 97% 22%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 35 14% 82%;          /* #D4D1CA */
+    --input: 35 14% 82%;
+    --ring: 183 97% 22%;
+
+    --radius: 0.5rem;
+
+    --font-sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  .dark {
+    --background: 37 22% 8%;
+    --foreground: 45 20% 94%;
+    --card: 37 18% 11%;
+    --card-foreground: 45 20% 94%;
+    --popover: 37 18% 11%;
+    --popover-foreground: 45 20% 94%;
+    --primary: 183 70% 40%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 37 15% 16%;
+    --secondary-foreground: 45 20% 94%;
+    --muted: 37 15% 16%;
+    --muted-foreground: 35 8% 58%;
+    --accent: 183 30% 16%;
+    --accent-foreground: 183 70% 40%;
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 37 12% 22%;
+    --input: 37 12% 22%;
+    --ring: 183 70% 40%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: var(--font-sans);
+  }
+  
+  /* RTL/LTR direction */
+  [dir="rtl"] {
+    font-family: var(--font-sans);
+    text-align: right;
+  }
+  
+  [dir="ltr"] {
+    text-align: left;
+  }
+}
+
+@layer utilities {
+  .text-brand { color: hsl(var(--brand)); }
+  .bg-brand { background-color: hsl(var(--brand)); }
+  .border-brand { border-color: hsl(var(--brand)); }
+
+  /* Smooth focus ring */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  }
+
+  /* Card hover */
+  .card-lift {
+    @apply transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-md;
+  }
+}
+
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, opacity, box-shadow, transform;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
+}
